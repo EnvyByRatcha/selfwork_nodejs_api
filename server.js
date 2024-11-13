@@ -12,6 +12,9 @@ const WorkSheetController = require("./controller/workSheetController");
 const SparePartController = require("./controller/sparePartController");
 
 app.post("/api/user/signIn", (req, res) => UserController.signIn(req, res));
+app.delete("/api/user/remove/:id", (req, res) =>
+  UserController.remove(req, res)
+);
 
 app.listen(3001, () => {
   console.log("server start !!");

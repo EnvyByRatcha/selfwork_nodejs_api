@@ -3,6 +3,8 @@ const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
+dotenv.config();
+
 module.exports = {
   signIn: async (req, res) => {
     try {
@@ -26,6 +28,34 @@ module.exports = {
       } else {
         return res.status(401).send("unauthorized");
       }
+    } catch (e) {
+      return res.status(500).send({ error: e.message });
+    }
+  },
+  create: async (req, res) => {
+    try {
+    } catch (e) {
+      return res.status(500).send({ error: e.message });
+    }
+  },
+  update: async (req, res) => {
+    try {
+    } catch (e) {
+      return res.status(500).send({ error: e.message });
+    }
+  },
+  remove: async (req, res) => {
+    try {
+      await prisma.user.update({
+        data: {
+          status: "unused",
+        },
+        where: {
+          id: parseInt(req.params.id),
+        },
+      });
+
+      return res.send({message:'success'});
     } catch (e) {
       return res.status(500).send({ error: e.message });
     }
