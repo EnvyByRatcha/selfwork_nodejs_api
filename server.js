@@ -15,6 +15,9 @@ app.post("/api/user/signIn", (req, res) => UserController.signIn(req, res));
 app.delete("/api/user/remove/:id", (req, res) =>
   UserController.remove(req, res)
 );
+app.post("/api/user/create", (req, res) => UserController.create(req, res));
+app.put("/api/user/update", (req, res) => UserController.update(req, res));
+app.get("/api/user/list/:role", (req, res) => UserController.list(req, res));
 
 app.listen(3001, () => {
   console.log("server start !!");

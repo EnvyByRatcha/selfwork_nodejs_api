@@ -17,7 +17,7 @@ module.exports = {
         where: {
           username,
           password,
-          status: "use",
+          status: "used",
         },
       });
       if (user != null) {
@@ -34,12 +34,38 @@ module.exports = {
   },
   create: async (req, res) => {
     try {
+      const { name, username, password, role } = req.body;
+
+      await prisma.user.create({
+        data: {
+          name,
+          username,
+          password,
+          role,
+        },
+      });
+
+      return res.send({ message: "success" });
     } catch (e) {
       return res.status(500).send({ error: e.message });
     }
   },
   update: async (req, res) => {
     try {
+      const { name, password, role, id } = req.body;
+
+      await prisma.user.update({
+        data: {
+          name,
+          password,
+          role,
+        },
+        where: {
+          id: parseInt(id),
+        },
+      });
+
+      return res.send({ message: "success" });
     } catch (e) {
       return res.status(500).send({ error: e.message });
     }
@@ -55,7 +81,36 @@ module.exports = {
         },
       });
 
-      return res.send({message:'success'});
+      return res.send({ message: "success" });
+    } catch (e) {
+      return res.status(500).send({ error: e.message });
+    }
+  },
+  list: async (req, res) => {
+    try {
+      let results;
+      if (req.params.role == "all") {
+        results = await prisma.user.findMany({
+          where: {
+            status: "used",
+          },
+          orderBy: {
+            id: "desc",
+          },
+        });
+      } else {
+        results = await prisma.user.findMany({
+          where: {
+            role: req.params.role,
+            status: "used",
+          },
+          orderBy: {
+            id: "desc",
+          },
+        });
+      }
+
+      return res.send({ results: results });
     } catch (e) {
       return res.status(500).send({ error: e.message });
     }
