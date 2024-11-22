@@ -27,20 +27,29 @@ enum Role {
   ADMIN
 }
 
-model SparePart {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String?
-  categoryId  Int
-  cost        Int
-  Category    Category @relation(fields: [categoryId], references: [id])
+model Product {
+  id            Int             @id @default(autoincrement())
+  name          String
+  cost          Int
+  qty           Int
+  createDate    DateTime        @default(now())
+  categoryId    Int
+  Category      Category        @relation(fields: [categoryId], references: [id])
+  ProductDetail ProductDetail[]
 }
 
 model Category {
-  id          Int         @id @default(autoincrement())
-  name        String
-  sparePartId Int
-  SparePart   SparePart[]
+  id      Int       @id @default(autoincrement())
+  name    String
+  Product Product[]
+}
+
+model ProductDetail {
+  id           Int     @id @default(autoincrement())
+  serialNumber String
+  status       String  @default("used")
+  productId    Int
+  Product      Product @relation(fields: [productId], references: [id])
 }
 
 model Customer {
@@ -52,4 +61,8 @@ model Customer {
   contact1 String
   contact2 String?
   status   String  @default("used")
+}
+
+model Store {
+  id Int @id @default(autoincrement())
 }

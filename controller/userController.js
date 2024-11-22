@@ -17,6 +17,7 @@ module.exports = {
         where: {
           username,
           password,
+          role: "ADMIN",
           status: "used",
         },
       });
