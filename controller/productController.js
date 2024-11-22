@@ -1,5 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const { update } = require("./userController");
 const prisma = new PrismaClient();
 
 module.exports = {

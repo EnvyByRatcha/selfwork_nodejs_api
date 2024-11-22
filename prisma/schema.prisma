@@ -14,12 +14,13 @@ datasource db {
 }
 
 model User {
-  id       Int    @id() @default(autoincrement())
-  name     String
-  username String
-  password String
-  role     Role   @default(USER)
-  status   String @default("used")
+  id         Int          @id() @default(autoincrement())
+  name       String
+  username   String
+  password   String
+  role       Role         @default(USER)
+  status     String       @default("used")
+  Assignment Assignment[]
 }
 
 enum Role {
@@ -45,22 +46,37 @@ model Category {
 }
 
 model ProductDetail {
-  id           Int     @id @default(autoincrement())
+  id           Int          @id @default(autoincrement())
   serialNumber String
-  status       String  @default("used")
+  status       String       @default("used")
   productId    Int
-  Product      Product @relation(fields: [productId], references: [id])
+  Product      Product      @relation(fields: [productId], references: [id])
+  Assignment   Assignment[]
 }
 
 model Customer {
-  id       Int     @id @default(autoincrement())
-  name     String
-  code     String
-  address  String
-  email    String
-  contact1 String
-  contact2 String?
-  status   String  @default("used")
+  id         Int          @id @default(autoincrement())
+  name       String
+  code       String
+  address    String
+  email      String
+  contact1   String
+  contact2   String?
+  status     String       @default("used")
+  Assignment Assignment[]
+}
+
+model Assignment {
+  id              Int           @id @default(autoincrement())
+  title           String
+  detail          String
+  customerId      Int
+  userId          Int
+  productDetailId Int
+  Customer        Customer      @relation(fields: [customerId], references: [id])
+  User            User          @relation(fields: [userId], references: [id])
+  ProductDetail   ProductDetail @relation(fields: [productDetailId], references: [id])
+  status          String        @default("created")
 }
 
 model Store {
