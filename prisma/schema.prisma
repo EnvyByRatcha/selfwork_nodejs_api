@@ -21,6 +21,7 @@ model User {
   role       Role         @default(USER)
   status     String       @default("used")
   Assignment Assignment[]
+  Store      Store[]
 }
 
 enum Role {
@@ -32,11 +33,12 @@ model Product {
   id            Int             @id @default(autoincrement())
   name          String
   cost          Int
-  qty           Int
+  qty           Int             @default(0)
   createDate    DateTime        @default(now())
   categoryId    Int
   Category      Category        @relation(fields: [categoryId], references: [id])
   ProductDetail ProductDetail[]
+  SparePart     SparePart[]
 }
 
 model Category {
@@ -54,6 +56,32 @@ model ProductDetail {
   Assignment   Assignment[]
 }
 
+model SparePart {
+  id            Int             @id @default(autoincrement())
+  name          String
+  cost          Int
+  qty           Int             @default(0)
+  status        String          @default("used")
+  createDate    DateTime        @default(now())
+  productId     Int
+  Product       Product         @relation(fields: [productId], references: [id])
+  UsedSparePart UsedSparePart[]
+}
+
+model SparePartDetail{
+  id Int @id @default(autoincrement())
+  
+}
+
+model UsedSparePart {
+  id           Int        @id @default(autoincrement())
+  sparePartId  Int
+  qty          Int
+  assignmentId Int
+  Assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  SparePart    SparePart  @relation(fields: [sparePartId], references: [id])
+}
+
 model Customer {
   id         Int          @id @default(autoincrement())
   name       String
@@ -67,18 +95,22 @@ model Customer {
 }
 
 model Assignment {
-  id              Int           @id @default(autoincrement())
+  id              Int             @id @default(autoincrement())
   title           String
   detail          String
+  createDate      DateTime        @default(now())
   customerId      Int
   userId          Int
   productDetailId Int
-  Customer        Customer      @relation(fields: [customerId], references: [id])
-  User            User          @relation(fields: [userId], references: [id])
-  ProductDetail   ProductDetail @relation(fields: [productDetailId], references: [id])
-  status          String        @default("created")
+  Customer        Customer        @relation(fields: [customerId], references: [id])
+  User            User            @relation(fields: [userId], references: [id])
+  ProductDetail   ProductDetail   @relation(fields: [productDetailId], references: [id])
+  status          String          @default("created")
+  UsedSparePart   UsedSparePart[]
 }
 
 model Store {
-  id Int @id @default(autoincrement())
+  id     Int  @id @default(autoincrement())
+  userId Int
+  User   User @relation(fields: [userId], references: [id])
 }
